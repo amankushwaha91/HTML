@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Examination System</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+    <div class="max-w-3xl w-full bg-white p-6 rounded-xl shadow-lg" id="main-box">
+
+        <h1 class="text-3xl font-bold text-center text-indigo-600 mb-6">
+            Online Examination System
+        </h1>
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen">
+            <p class="text-lg text-gray-700 mb-3">Enter your name to begin:</p>
+            <input id="user-name" 
+                   class="w-full p-3 border rounded-lg"
+                   placeholder="Enter Name" />
+
+            <button onclick="startExam()"
+                    class="w-full mt-4 bg-indigo-600 text-white font-semibold p-3 rounded-lg">
+                Start Exam
+            </button>
+        </div>
+
+        <!-- Exam Screen -->
+        <div id="exam-screen" class="hidden">
+            <div class="flex justify-between mb-4">
+                <h2 id="q-number" class="font-semibold text-gray-700"></h2>
+                <p id="timer" class="font-mono text-xl"></p>
+            </div>
+
+            <p id="q-text" class="text-xl font-semibold mb-4"></p>
+
+            <div id="options" class="space-y-3"></div>
+
+            <button onclick="nextQuestion()"
+                    id="next-btn"
+                    class="w-full mt-6 bg-indigo-600 text-white font-semibold p-3 rounded-lg">
+                Next
+            </button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <h2 id="result-msg" class="text-2xl font-bold mb-3"></h2>
+
+            <p class="text-lg">Score: <span id="score"></span></p>
+            <p class="text-lg">Percentage: <span id="percent"></span>%</p>
+
+            <button onclick="downloadResult()"
+                    class="w-full mt-4 bg-emerald-600 text-white p-3 rounded-lg">
+                Download Result
+            </button>
+
+            <button onclick="location.reload()"
+                    class="w-full mt-3 bg-gray-300 p-3 rounded-lg">
+                Restart Exam
+            </button>
+        </div>
+    </div>
+
+
+<script>
+let questions = [];
+let currentIndex = 0;
+let userAnswers = [];
+let timer = 180;
+let timerInterval;
+let userName = "";
+
+// -------- FETCH QUESTIONS FROM BACKEND ----------
+async function startExam() {
+    userName = document.getElementById("user-name").value.trim();
+    if (!userName) return alert("Enter your name!");
+
+    const res = await fetch("http://localhost:5000/questions");
+    questions = await res.json();
+
+    document.getElementById("welcome-screen").classList.add("hidden");
+    document.getElementById("exam-screen").classList.remove("hidden");
+
+    renderQuestion();
+    startTimer();
+}
+
+// -------- RENDER QUESTION ----------
+function renderQuestion() {
+    let q = questions[currentIndex];
+    document.getElementById("q-number").innerText = `Question ${currentIndex + 1} / ${questions.length}`;
+    document.getElementById("q-text").innerText = q.text;
+
+    document.getElementById("options").innerHTML = q.options
+        .map((opt, i) => `
+            <label class="flex p-3 border rounded-lg cursor-pointer">
+                <input type="radio" name="answer" value="${i}" class="mr-3">
+                ${opt}
+            </label>
+        `).join('');
+}
+
+// -------- TIMER ----------
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timer--;
+        document.getElementById("timer").innerText = 
+            `${String(Math.floor(timer/60)).padStart(2,'0')}:${String(timer%60).padStart(2,'0')}`;
+
+        if (timer <= 0) submitExam();
+    }, 1000);
+}
+
+// -------- NEXT QUESTION ----------
+function nextQuestion() {
+    let selected = document.querySelector("input[name='answer']:checked");
+    if (!selected) return alert("Select an answer!");
+
+    userAnswers.push(Number(selected.value));
+
+    currentIndex++;
+
+    if (currentIndex >= questions.length) {
+        submitExam();
+    } else {
+        renderQuestion();
+    }
+}
+
+// -------- SUBMIT EXAM TO BACKEND ----------
+async function submitExam() {
+    clearInterval(timerInterval);
+    
+    const res = await fetch("http://localhost:5000/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: userName,
+            answers: userAnswers
+        })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("exam-screen").classList.add("hidden");
+    document.getElementById("result-screen").classList.remove("hidden");
+
+    document.getElementById("result-msg").innerText = data.message;
+    document.getElementById("score").innerText = `${data.score} / ${data.total}`;
+    document.getElementById("percent").innerText = data.percentage;
+
+    window.resultFile = data.fileName;
+}
+
+// -------- DOWNLOAD RESULT FILE ----------
+function downloadResult() {
+    window.location.href = "http://localhost:5000/download/" + window.resultFile;
+}
+</script>
+</body>
+</html>

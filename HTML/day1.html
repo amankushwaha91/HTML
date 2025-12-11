@@ -1,0 +1,469 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Examination System</title>
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#4f46e5', // Indigo-600
+                        'secondary': '#10b981', // Emerald-500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for UI aesthetics and responsiveness */
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem;
+            background-color: white;
+        }
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+        /* Custom radio button styling */
+        input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            border: 2px solid #a5b4fc;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            position: relative;
+            top: 2px;
+        }
+
+        input[type="radio"]:checked {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        input[type="radio"]:checked::after {
+            content: '';
+            display: block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 sm:p-8">
+
+    <div id="app-container" class="w-full max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Online Examination Suite</h1>
+            <p class="text-gray-500 mt-1">Multi-Choice Question (MCQ) Test</p>
+        </header>
+
+        <!-- Dynamic Content Area (Welcome, Quiz, Results) -->
+        <div id="content" class="card p-6 sm:p-10">
+            <!-- Content will be injected by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // Unique ID for the environment (used in exported file content)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'online-exam-suite';
+
+        // --- EXAM DATA (COLLECTIONS) ---
+
+        /**
+         * @typedef {Object} Question
+         * @property {string} text - The question text.
+         * @property {string[]} options - Array of answer options.
+         * @property {number} correctIndex - Index (0-based) of the correct answer.
+         */
+
+        /** @type {Question[]} */
+        const quizData = [
+            {
+                text: "What is the primary purpose of a 'Thread' in concurrent programming?",
+                options: ["To pause execution indefinitely", "To allow concurrent execution of code blocks", "To handle file input/output only", "To define a class structure"],
+                correctIndex: 1
+            },
+            {
+                text: "Which of the following data structures is typically used to implement a LIFO (Last-In, First-Out) collection?",
+                options: ["Queue", "Array", "Stack", "Linked List"],
+                correctIndex: 2
+            },
+            {
+                text: "In Java/JavaScript, what mechanism is used to handle synchronous or runtime errors (Exception Handling)?",
+                options: ["If/Else statements", "Try...Catch block", "Console.log", "Event Listeners"],
+                correctIndex: 1
+            },
+            {
+                text: "Which HTML tag is used to create a hyperlink?",
+                options: ["<link>", "<href>", "<a>", "<nav>"],
+                correctIndex: 2
+            },
+            {
+                text: "When performing File I/O, converting complex data to a JSON string is an example of which concept?",
+                options: ["Inheritance", "Polymorphism", "Strings", "Encapsulation"],
+                correctIndex: 2 // Strings concept
+            }
+        ];
+
+        // State Management
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null); // Collections: Stores answers
+        const EXAM_DURATION_MINUTES = 3;
+        let timerSeconds = EXAM_DURATION_MINUTES * 60;
+        let timerInterval = null; // Represents the Thread/Timer
+        let userName = '';
+        let startTime = null;
+
+        const contentDiv = document.getElementById('content');
+
+        // --- TIMER (THREADS) FUNCTIONS ---
+
+        /**
+         * Starts the exam timer and updates the display every second.
+         */
+        function startTimer() {
+            startTime = Date.now();
+            // Start a recurring interval (simulating a dedicated timing thread)
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerSeconds = 0;
+                    updateTimerDisplay();
+                    // Auto-evaluation and result generation upon timer completion
+                    showResults(true); // true means time ran out
+                }
+            }, 1000);
+        }
+
+        /**
+         * Updates the timer display in the UI.
+         */
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const seconds = (timerSeconds % 60).toString().padStart(2, '0');
+            const timerEl = document.getElementById('timer-value');
+            if (timerEl) {
+                timerEl.textContent = `${minutes}:${seconds}`;
+                // Highlight red when time is low
+                if (timerSeconds <= 30) {
+                    timerEl.classList.add('text-red-600', 'font-bold');
+                } else {
+                    timerEl.classList.remove('text-red-600', 'font-bold');
+                }
+            }
+        }
+
+        // --- RENDERING FUNCTIONS ---
+
+        /**
+         * Renders the initial welcome screen and name input.
+         */
+        function renderWelcomeScreen() {
+            contentDiv.innerHTML = `
+                <div class="text-center space-y-6">
+                    <p class="text-xl text-gray-700">Welcome to the Online Examination System!</p>
+                    <p class="text-sm text-gray-500">This exam consists of ${quizData.length} multiple-choice questions and has a time limit of <span class="font-semibold text-primary">${EXAM_DURATION_MINUTES} minutes</span>.</p>
+
+                    <div class="max-w-md mx-auto pt-4">
+                        <label for="user-name" class="block text-left text-sm font-medium text-gray-700 mb-2">Enter Your Name</label>
+                        <input type="text" id="user-name" placeholder="E.g., Jane Doe"
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150"
+                               value="${userName}" />
+                    </div>
+
+                    <button onclick="startExam()"
+                            class="mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50 disabled:bg-gray-400">
+                        Start Exam
+                    </button>
+                </div>
+            `;
+            // Re-attach event listener for input change
+            const nameInput = document.getElementById('user-name');
+            nameInput.addEventListener('input', (e) => { userName = e.target.value.trim(); });
+            nameInput.focus();
+        }
+
+        /**
+         * Renders the current question and options.
+         */
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const q = quizData[currentQuestionIndex];
+            const qNum = currentQuestionIndex + 1;
+            const totalQ = quizData.length;
+            const selectedAnswer = userAnswers[currentQuestionIndex];
+
+            const optionsHtml = q.options.map((option, index) => `
+                <label for="option-${index}" class="flex items-start p-4 border border-gray-200 rounded-xl hover:bg-indigo-50 transition duration-150 cursor-pointer">
+                    <input type="radio" id="option-${index}" name="answer" value="${index}"
+                           ${selectedAnswer === index ? 'checked' : ''}
+                           onchange="handleAnswer(${index})" class="mt-1" />
+                    <span class="ml-3 text-base text-gray-800">${option}</span>
+                </label>
+            `).join('');
+
+            contentDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h2 class="text-lg font-semibold text-gray-700">Question ${qNum} of ${totalQ}</h2>
+                    <div class="text-2xl font-mono text-gray-800 timer-display" id="timer-value">
+                        --:--
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <p class="text-xl font-bold text-gray-900">${q.text}</p>
+                </div>
+
+                <div class="space-y-4" id="options-container">
+                    ${optionsHtml}
+                </div>
+
+                <div class="mt-8 flex flex-col items-center">
+                    <!-- Error message display slot -->
+                    <p id="error-msg" class="text-red-500 text-sm mb-4"></p>
+
+                    <div class="flex justify-end space-x-4 w-full">
+                        <!-- Navigation buttons -->
+                        <button onclick="nextQuestion()"
+                                id="next-btn"
+                                class="flex-grow px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50 disabled:bg-gray-400">
+                            ${qNum === totalQ ? 'Submit Exam (Auto-Evaluation)' : 'Next Question'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            updateTimerDisplay(); // Initial timer update
+        }
+
+        /**
+         * Renders the final results page.
+         * @param {boolean} [timedOut=false] - Whether the user ran out of time.
+         */
+        function showResults(timedOut = false) {
+            // Stop the timer "thread"
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            // Auto-Evaluation Logic
+            let score = 0;
+            const maxScore = quizData.length;
+            const completionTimeMs = startTime ? Date.now() - startTime : 0;
+            const completionMinutes = Math.floor(completionTimeMs / 60000);
+            const completionSeconds = Math.floor((completionTimeMs % 60000) / 1000);
+            const timeTaken = `${completionMinutes.toString().padStart(2, '0')}:${completionSeconds.toString().padStart(2, '0')}`;
+
+            quizData.forEach((q, index) => {
+                // Check if the user's answer (Collections) matches the correct index
+                if (userAnswers[index] !== null && userAnswers[index] === q.correctIndex) {
+                    score++;
+                }
+            });
+
+            const percentage = ((score / maxScore) * 100).toFixed(1);
+            const isPassed = score >= Math.ceil(maxScore * 0.6); // 60% passing mark
+            const resultColor = isPassed ? 'text-secondary' : 'text-red-600';
+            const resultMessage = timedOut ? "Time Expired! Your exam was automatically submitted." : (isPassed ? "Congratulations! You Passed." : "Better Luck Next Time.");
+
+            contentDiv.innerHTML = `
+                <div class="text-center space-y-6">
+                    <h2 class="text-3xl font-extrabold ${resultColor}">${resultMessage}</h2>
+                    <p class="text-xl text-gray-800">Candidate: <span class="font-semibold text-primary">${userName || 'N/A'}</span></p>
+
+                    <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <div class="font-medium text-gray-600 text-left">Score:</div>
+                        <div class="font-bold text-lg text-right text-gray-900">${score} / ${maxScore}</div>
+
+                        <div class="font-medium text-gray-600 text-left">Percentage:</div>
+                        <div class="font-bold text-lg text-right ${resultColor}">${percentage}%</div>
+
+                        <div class="font-medium text-gray-600 text-left">Time Taken:</div>
+                        <div class="font-bold text-lg text-right text-gray-900">${timedOut ? 'Limit Reached' : timeTaken}</div>
+                    </div>
+
+                    <button onclick="exportResults()"
+                            class="mt-8 px-6 py-3 bg-secondary text-white font-semibold rounded-lg shadow-md hover:bg-emerald-600 transition duration-150 focus:outline-none focus:ring-4 focus:ring-secondary focus:ring-opacity-50">
+                        Export Results (File I/O)
+                    </button>
+
+                    <button onclick="resetExam()"
+                            class="mt-4 ml-4 px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition duration-150 focus:outline-none">
+                        Take Exam Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- INTERACTION HANDLERS ---
+
+        function startExam() {
+            if (!userName) {
+                // Exception Handling: Basic input validation
+                document.getElementById('content').innerHTML += `<p id="error-msg-start" class="text-red-500 mt-4 text-sm">Please enter your name to start the exam.</p>`;
+                setTimeout(() => {
+                    const errorMsg = document.getElementById('error-msg-start');
+                    if (errorMsg) errorMsg.remove();
+                }, 3000);
+                return;
+            }
+            startTimer();
+            renderQuestion();
+        }
+
+        /**
+         * Stores the user's selected answer in the state collection.
+         * @param {number} selectedIndex - The index of the selected option.
+         */
+        function handleAnswer(selectedIndex) {
+            // Collections: Update the userAnswers array
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            // Clear any previous error message if an answer is selected
+            const errorMsgEl = document.getElementById('error-msg');
+            if (errorMsgEl) errorMsgEl.textContent = '';
+        }
+
+        function nextQuestion() {
+            const errorMsgEl = document.getElementById('error-msg');
+
+            if (userAnswers[currentQuestionIndex] === null) {
+                // Exception Handling: Prompt user if no answer is selected
+                if (errorMsgEl) {
+                    errorMsgEl.textContent = 'Please select an answer before proceeding.';
+                    // Clear the error message after a short time
+                    setTimeout(() => {
+                        if (errorMsgEl) errorMsgEl.textContent = '';
+                    }, 3000);
+                }
+                return;
+            }
+
+            // Clear error message if moving forward successfully
+            if (errorMsgEl) errorMsgEl.textContent = '';
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                renderQuestion();
+            } else {
+                // End of quiz, show results and stop timer
+                clearInterval(timerInterval);
+                showResults();
+            }
+        }
+
+        function resetExam() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            timerSeconds = EXAM_DURATION_MINUTES * 60;
+            timerInterval = null;
+            startTime = null;
+            renderWelcomeScreen();
+        }
+
+        /**
+         * Generates a result summary (String) and exports it as a downloadable file (File I/O).
+         */
+        function exportResults() {
+            // Strings: Build the output string
+            let resultText = `--- Online Examination System Results ---\n`;
+            resultText += `Project ID: ${appId}\n`;
+            resultText += `Candidate: ${userName}\n`;
+            resultText += `Date: ${new Date().toLocaleString()}\n\n`;
+
+            // Calculate final score
+            let score = 0;
+            quizData.forEach((q, index) => {
+                if (userAnswers[index] !== null && userAnswers[index] === q.correctIndex) {
+                    score++;
+                }
+            });
+
+            const maxScore = quizData.length;
+            const percentage = ((score / maxScore) * 100).toFixed(1);
+
+            resultText += `FINAL SCORE: ${score} / ${maxScore} (${percentage}%)\n\n`;
+            resultText += `--- Detailed Answers ---\n`;
+
+            quizData.forEach((q, index) => {
+                const qNum = index + 1;
+                const userAnswerIndex = userAnswers[index];
+                const isCorrect = userAnswerIndex === q.correctIndex;
+                const result = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+                resultText += `\nQ${qNum}: ${q.text}\n`;
+                resultText += `   Your Answer: ${userAnswerIndex !== null ? q.options[userAnswerIndex] : 'No Answer'}\n`;
+                resultText += `   Correct Answer: ${q.options[q.correctIndex]}\n`;
+                resultText += `   Result: ${result}\n`;
+            });
+
+            // File I/O Simulation: Download the result string as a .txt file
+            try {
+                const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `exam_results_${userName.replace(/\s/g, '_')}_${Date.now()}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                // Exception Handling for file operations
+                console.error("Failed to export results:", error);
+                // Display error message instead of alert()
+                const resultsContainer = document.querySelector('.text-center.space-y-6');
+                if (resultsContainer) {
+                    const errorBox = document.createElement('p');
+                    errorBox.className = 'text-red-500 font-medium p-2 bg-red-100 rounded-lg mt-4';
+                    errorBox.textContent = 'Error during file export. See console for details.';
+                    resultsContainer.appendChild(errorBox);
+                }
+            }
+        }
+
+
+        // --- INITIALIZATION ---
+        window.onload = renderWelcomeScreen;
+
+    </script>
+</body>
+</html>
