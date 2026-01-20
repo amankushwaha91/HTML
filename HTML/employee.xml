@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE employee [
+  <!ELEMENT employee (name, id, mobno, address, salary, DOJ, DOB, age)>
+    <!ELEMENT name (#PCDATA)>
+    <!ELEMENT id (#PCDATA)>
+    <!ELEMENT mobno (#PCDATA)>
+    <!ELEMENT address (#PCDATA)>
+    <!ELEMENT salary (#PCDATA)>
+    <!ELEMENT DOJ (#PCDATA)>
+    <!ELEMENT DOB (#PCDATA)>
+    <!ELEMENT age (#PCDATA)>
+]>
+<employee>
+  <name>Aman Raj</name>
+    <id>0241ITETWN019</id>
+    <mobno>6200245376</mobno>
+    <address>greater noida</address>
+    <salary>250000</salary>
+    <DOJ>01-07-2025</DOJ>
+    <DOB>05-02-2005</DOB>
+    <age>19</age>
+</employee>

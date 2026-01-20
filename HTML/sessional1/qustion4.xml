@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data
+    xmlns:stu="http://www.example.com/student"
+    xmlns:crs="http://www.example.com/course">
+
+    <stu:student id="S101">
+        <stu:name>Aman</stu:name>
+        <stu:age>20</stu:age>
+        <stu:grade>A</stu:grade>
+    </stu:student>
+
+    <stu:student id="S102">
+        <stu:name>Riya</stu:name>
+        <stu:age>21</stu:age>
+        <stu:grade>B</stu:grade>
+    </stu:student>
+
+    <crs:course code="C101">
+        <crs:title>Web Development</crs:title>
+        <crs:duration>3 Months</crs:duration>
+    </crs:course>
+
+    <crs:course code="C102">
+        <crs:title>Python Programming</crs:title>
+        <crs:duration>2 Months</crs:duration>
+    </crs:course>
+
+</data>
