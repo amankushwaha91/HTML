@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ID and Class Selector Design</title>
+
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            background:#f3f4f6;
+            font-family:Segoe UI, Arial, sans-serif;
+        }
+
+        #main-section{
+            width:80%;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        #main-section h1{
+            text-align:center;
+            color:#1f2937;
+            margin-bottom:30px;
+        }
+
+        .card{
+            background:#e0f2fe;
+            padding:20px;
+            margin-bottom:20px;
+            border-left:6px solid #0284c7;
+            border-radius:6px;
+        }
+
+        .card h3{
+            margin-top:0;
+            color:#075985;
+        }
+
+        .card p{
+            color:#1e293b;
+            line-height:1.6;
+        }
+    </style>
+
+</head>
+<body>
+
+    <section id="main-section">
+        <h1>Styled Section Using ID </h1>
+
+        <div class="card">
+            <h3>Card One</h3>
+            <p>HTML</p>
+        </div>
+
+        <div class="card">
+            <h3>Card Two</h3>
+            <p>CSS</p>
+        </div>
+
+        <div class="card">
+            <h3>Card Three</h3>
+            <p>JavaScript</p>
+        </div>
+    </section>
+
+</body>
+</html>

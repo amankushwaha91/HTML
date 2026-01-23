@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Layout Design</title>
+
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            background:#eef2f5;
+            font-family:Segoe UI, Arial, sans-serif;
+        }
+
+        .header{
+            background:#1f2937;
+            color:#ffffff;
+            text-align:center;
+            padding:25px;
+            font-size:24px;
+        }
+
+        .wrapper{
+            width:90%;
+            margin:20px auto;
+            overflow:hidden;
+            background:#ffffff;
+            border-radius:6px;
+        }
+
+        .sidebar{
+            width:25%;
+            float:left;
+            background:#f9fafb;
+            padding:20px;
+            box-sizing:border-box;
+            border-right:1px solid #e5e7eb;
+        }
+
+        .sidebar h3{
+            margin-top:0;
+        }
+
+        .content{
+            width:75%;
+            float:left;
+            padding:25px;
+            box-sizing:border-box;
+            line-height:1.6;
+        }
+
+        .footer{
+            clear:both;
+            background:#1f2937;
+            color:white;
+            text-align:center;
+            padding:18px;
+            margin-top:20px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="header">
+        Website Header
+    </div>
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <h3>Sidebar</h3>
+            <p>Home</p>
+            <p>About</p>
+            <p>Services</p>
+            <p>Contact</p>
+        </div>
+
+        <div class="content">
+            <h2>Content Area</h2>
+            <p>
+                This section contains the main content of the webpage. 
+                Proper margins and padding are applied to ensure clean alignment 
+                and an attractive layout.
+            </p>
+            <p>
+                The sidebar and content area are aligned using CSS float 
+                properties, while the footer remains fixed at the bottom.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 second sessional
+    </div>
+
+</body>
+</html>
+

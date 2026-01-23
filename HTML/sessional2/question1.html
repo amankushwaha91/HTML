@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>List Styling</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 30px;
+}
+
+.box{
+    width: 450px;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.title{
+    text-align: center;
+    color: #333;
+}
+
+.unorder{
+    list-style-type: circle;
+    padding-left: 40px;
+    margin-bottom: 20px;
+}
+
+.unorder li{
+    color: #1a73e8;
+    font-size: 16px;
+    padding: 6px 0;
+}
+
+.order{
+    list-style-type: upper-alpha;
+    padding-left: 40px;
+}
+
+.order li{
+    color: #0b8043;
+    font-size: 16px;
+    padding: 6px 0;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2 class="title">List Styling Example</h2>
+
+    <ul class="unorder">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+    </ul>
+
+    <ol class="order">
+        <li>Planning</li>
+        <li>Design</li>
+        <li>Development</li>
+    </ol>
+</div>
+
+</body>
+</html>

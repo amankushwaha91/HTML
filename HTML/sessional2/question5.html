@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Positioning and Display Demo</title>
+
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            background:#f3f4f6;
+            font-family:Segoe UI, Arial, sans-serif;
+        }
+
+        .container{
+            width:85%;
+            margin:40px auto;
+            background:#ffffff;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .relative-box{
+            position:relative;
+            background:#e0f2fe;
+            padding:30px;
+            height:200px;
+            border-radius:8px;
+            margin-bottom:40px;
+        }
+
+        .absolute-box{
+            position:absolute;
+            top:20px;
+            right:20px;
+            background:#0284c7;
+            color:white;
+            padding:15px 20px;
+            border-radius:6px;
+        }
+
+        .block-demo{
+            background:#d1fae5;
+            padding:15px;
+            margin-bottom:30px;
+            border-radius:8px;
+        }
+
+        .block-item{
+            display:block;
+            background:#10b981;
+            color:white;
+            padding:15px;
+            margin-bottom:10px;
+            border-radius:5px;
+        }
+
+        .inline-block-demo{
+            background:#fff7ed;
+            padding:15px;
+            border-radius:8px;
+        }
+
+        .inline-item{
+            display:inline-block;
+            background:#f97316;
+            color:white;
+            padding:15px;
+            margin:5px;
+            border-radius:5px;
+            width:120px;
+            text-align:center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h2>Relative and Absolute Positioning</h2>
+        <div class="relative-box">
+            This is a relative positioned container
+            <div class="absolute-box">
+                Absolute Box
+            </div>
+        </div>
+
+        <h2>Block Elements</h2>
+        <div class="block-demo">
+            <div class="block-item">Block 1</div>
+            <div class="block-item">Block 2</div>
+            <div class="block-item">Block 3</div>
+        </div>
+
+        <h2>Inline-Block Elements</h2>
+        <div class="inline-block-demo">
+            <div class="inline-item">Item 1</div>
+            <div class="inline-item">Item 2</div>
+            <div class="inline-item">Item 3</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
