@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Popup Boxes Example</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: yellow; 
+            font-family: "Times New Roman", serif;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 80px;
+            font-size: 52px;
+            color: green;
+            text-shadow: 2px 2px 3px #999;
+        }
+
+        .buttons {
+            margin-top: 60px;
+        }
+
+        button {
+            font-size: 22px;
+            padding: 12px 30px;
+            margin: 0 10px;
+            border: 3px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 3px 3px 5px #555;
+        }
+
+        .alert {
+            background-color: pink;
+        }
+
+        .confirm {
+            background-color: cyan;
+        }
+
+        .prompt {
+            background-color: light blue
+        }
+
+        #promptText {
+            margin-top: 70px;
+            font-size: 32px;
+            color: brown
+        }
+    </style>
+</head>
+<body>
+
+    <h1>JavaScript Popup Boxes<br>Example</h1>
+
+    <div class="buttons">
+        <button class="alert" onclick="showAlert()">Alert Box</button>
+        <button class="confirm" onclick="showConfirm()">Confirm Box</button>
+        <button class="prompt" onclick="showPrompt()">Prompt Box</button>
+    </div>
+    
+    <div id="promptText">Hello this is prompt box</div>
+
+    <script>
+        function showAlert() {
+            alert("This is an Alert Box");
+        }
+
+        function showConfirm() {
+            confirm("Do you want to continue?");
+        }
+
+        function showPrompt() {
+            prompt("Enter something:");
+        }
+    </script>
+
+</body>
+</html>

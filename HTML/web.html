@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<h1></h1>
+
+<div class="abc"></div>
+<div class="abc"></div>
+<div id="xyz"></div>
+
+<script>
+document.write("hello this is write method<br>");
+window.document.write("hello i am window element");
+
+document.getElementsByTagName("h1")[0].innerHTML = "Hello this is heading";
+
+document.getElementsByClassName("abc")[0].innerHTML = "Hello this is div with class abc";
+document.getElementsByClassName("abc")[1].innerHTML = "Hello this is div with class abc1";
+document.getElementById("xyz").innerHTML = "Hello this is div with id xyz";
+
+var elems = document.getElementsByClassName("abc");
+elems[0].style.color = "red";
+elems[1].style.color = "green";
+document.getElementById("xyz").style.color = "blue";
+
+var heading = document.getElementsByTagName("h1")[0];
+heading.style.textAlign = "center";
+heading.style.backgroundColor = "yellow";
+heading.style.color = "purple";
+
+document.body.style.backgroundColor = "lightgrey";
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Events</title>
+</head>
+
+<body onload="pageLoaded()">
+
+<h2>JavaScript Events Example</h2>
+
+<button onclick="clickEvent()">Click Me</button>
+
+<br><br>
+
+<div onmouseover="mouseOver()"
+     onmouseout="mouseOut()"
+     style="width:200px;height:100px;background-color:lightblue;">
+    Move mouse here
+</div>
+
+<br><br>
+
+<input type="text" onkeyup="keyPressed()" placeholder="Type something">
+
+<p id="msg"></p>
+
+<script>
+function pageLoaded() {
+    alert("Page Loaded Successfully!");
+}
+
+function clickEvent() {
+    document.getElementById("msg").innerHTML = "Button Clicked!";
+}
+
+function mouseOver() {
+    document.getElementById("msg").innerHTML = "Mouse Over the Box";
+}
+
+function mouseOut() {
+    document.getElementById("msg").innerHTML = "Mouse Out of the Box";
+}
+
+function keyPressed() {
+    document.getElementById("msg").innerHTML = "Key Pressed";
+}
+</script>
+
+</body>
+</html>
