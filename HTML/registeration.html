@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Registration Form</title>
+<style>
+body{
+    background:linear-gradient(to right,teal,pink);
+    font-family:Arial;
+}
+.container{
+    width:700px;
+    margin:auto;
+    background:#3aa6a6;
+    padding:20px;
+    border-radius:5px;
+}
+h1{
+    text-align:center;
+    color: black;
+}
+table{
+    width:100%;
+}
+td{
+    padding:8px;
+    color:black;
+}
+input,textarea,select{
+    width:95%;
+    padding:5px;
+}
+button{
+    width:100px;
+    padding:6px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>USER REGISTRATION FORM</h1>
+
+<form>
+<table>
+<tr><td>Username:</td><td><input type="text"></td></tr>
+<tr><td>Email:</td><td><input type="email"></td></tr>
+<tr><td>Password:</td><td><input type="password"></td></tr>
+<tr><td>Confirm Password:</td><td><input type="password"></td></tr>
+<tr><td>Phone No:</td><td><input type="tel"></td></tr>
+<tr><td>DOB:</td><td><input type="date"></td></tr>
+
+<tr>
+<td>Age:</td>
+<td>
+<span id="ageValue">Selected Age: 0</span><br>
+<input type="range" min="0" max="100" value="0" oninput="updateAge(this.value)">
+</td>
+</tr>
+
+<tr>
+<td>Gender:</td>
+<td>
+<input type="radio" name="gender"> Male
+<input type="radio" name="gender"> Female
+</td>
+</tr>
+
+<tr><td>Upload Document:</td><td><input type="file"></td></tr>
+<tr><td>Upload Photo:</td><td><input type="file"></td></tr>
+<tr><td>Address:</td><td><textarea rows="3"></textarea></td></tr>
+
+<tr>
+<td>Subject:</td>
+<td>
+<select>
+<option>Select</option>
+<option>Math</option>
+<option>Science</option>
+<option>Computer</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td><button type="submit">Submit</button></td>
+<td><button type="reset">Reset</button></td>
+</tr>
+</table>
+</form>
+</div>
+
+<!--<script>
+function updateAge(v){
+    document.getElementById("ageValue").innerText="Selected Age: "+v;
+}
+</script>-->
+ <script src="/HTML/javascript/registeration.js"></script>
+
+</body>
+</html>

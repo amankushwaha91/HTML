@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+</head>
+
+<body>
+    <h1>JavaScript ES6 concept using Dom</h1>
+    <div class="box">
+        <h2>Arrow Destructuring Example</h2>
+        <p id="arrow"> </p>
+
+        <div class="box">
+            <h2>Template string</h2>
+            <p id="tem">p </p>
+
+            <div>
+                <h3>string method</h3>
+                <p id="str"> </p>
+
+                <div>
+                    <h3>Callback Function Example</h3>
+                    <button onclick="calculate()">Click Me</button>
+                    <p id="cb"></p>
+
+                    <div>
+                        <h4> object destructuring </h4>
+                        <p id="obj"> </p>
+
+                        <div>
+                            <h4>spread and rest</h4>
+                            <p id="sr"> </p>
+
+                            <div>
+                                <h5> diff</h5>
+                                <p id="diff"> </p>
+
+                                <div>
+                                    <h6> setTimeout</h6>
+                                    <p id="st"> </p>
+                                </div>
+
+
+                                <script>
+                                    let add = (a, b = 5) => a + b;
+                                    document.getElementById("arrow").innerHTML = "The sum is: " + add(10);
+
+                                    let name = "AMAN";
+                                    let age = 19;
+                                    let message = `My name is ${name} <br> and I am ${age} years old.`;
+                                    document.getElementById("tem").innerHTML = message;
+
+                                    let str = "Hello, welcome to JavaScript ES6 features.";
+                                    document.getElementById("str").innerHTML =
+                                        "String Length: " + str.length + "<br>" +
+                                        "Uppercase: " + str.toUpperCase() + "<br>" +
+                                        "Lowercase: " + str.toLowerCase() + "<br>" +
+                                        "Includes 'JavaScript': " + str.includes("JavaScript");
+
+                        
+                                    function showResult(result) {
+                                        document.getElementById("cb").innerHTML = "Result after callback: " + result;
+                                    }
+
+                                    function addNumbers(a, b, callback) {
+                                        let sum = a + b;
+                                        callback(sum);
+                                    }
+
+                                    function calculate() {
+                                        addNumbers(15, 25, showResult);
+                                    }
+
+                                   
+                                    let student = {
+                                        name: "Aman",
+                                        age: 19,
+                                        course: "B.Tech"
+                                    };
+                                    let {
+                                        name: studentName,
+                                        age: studentAge,
+                                        course: studentCourse
+                                    } = student;
+                                    document.getElementById("obj").innerHTML =
+                                        "Name: " + studentName + "<br>" +
+                                        "Age: " + studentAge + "<br>" +
+                                        "Course: " + studentCourse;
+
+
+
+                        
+                                    function sumAll(...numbers) {
+                                        return numbers.reduce((acc, curr) => acc + curr, 0);
+                                    }
+                                    let total = sumAll(10, 20, 30, 40, 50);
+                                    document.getElementById("sr").innerHTML = "Total Sum using Rest Operator: " + total;
+
+                                    let arr1 = [1, 2, 3];
+                                    let arr2 = [4, 5, 6];
+                                    let combinedArray = [...arr1, ...arr2];
+                                    document.getElementById("diff").innerHTML = "Combined Array using Spread Operator: " + combinedArray;
+
+                        
+                                    setTimeout(() => {
+                                        document.getElementById("st").innerHTML = "This message is displayed after 10 seconds using setTimeout.";
+                                    }, 10000);
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

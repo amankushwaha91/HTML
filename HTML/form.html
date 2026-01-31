@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Registration Form</title>
+<style>
+body{
+    margin:0;
+    padding:0;
+    background:linear-gradient(to right,#2aa9a9,#e48cb2);
+    font-family:Arial,Helvetica,sans-serif;
+}
+.container{
+    width:750px;
+    margin:40px auto;
+    background:#2fb0b0;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    color:black;
+    letter-spacing:2px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+td{
+    padding:8px;
+    border:1px solid #1f8f8f;
+    color:black;
+}
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=tel],
+input[type=date],
+textarea,
+select{
+    width:95%;
+    padding:6px;
+    border:none;
+    outline:none;
+}
+input[type=range]{
+    width:90%;
+}
+textarea{
+    resize:none;
+}
+button{
+    padding:6px 20px;
+    border:none;
+    cursor:pointer;
+}
+#submit{
+    background:white;
+}
+#reset{
+    background: white;
+}
+#ageText{
+    color:black;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>USER REGISTRATION FORM</h1>
+
+<form>
+<table>
+<tr><td>Username:</td><td><input type="text"></td></tr>
+<tr><td>Email:</td><td><input type="email"></td></tr>
+<tr><td>Password:</td><td><input type="password"></td></tr>
+<tr><td>Confirm Password:</td><td><input type="password"></td></tr>
+<tr><td>Phone No:</td><td><input type="tel"></td></tr>
+<tr><td>DOB:</td><td><input type="date"></td></tr>
+
+<tr>
+<td>Age:</td>
+<td>
+<span id="ageText">Selected Age: 0</span><br><br>
+<input type="range" min="0" max="100" value="0" oninput="setAge(this.value)">
+</td>
+</tr>
+
+<tr>
+<td>Gender:</td>
+<td>
+<input type="radio" name="g"> Male
+<input type="radio" name="g"> Female
+</td>
+</tr>
+
+<tr><td>Upload Document:</td><td><input type="file"></td></tr>
+<tr><td>Upload Photo:</td><td><input type="file"></td></tr>
+<tr><td>Address:</td><td><textarea rows="3"></textarea></td></tr>
+
+<tr>
+<td>Subject:</td>
+<td>
+<select>
+<option>Select</option>
+<option>Math</option>
+<option>Science</option>
+<option>Computer</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td><button id="submit" type="submit">Submit</button></td>
+<td><button id="reset" type="reset">Reset</button></td>
+</tr>
+</table>
+</form>
+</div>
+
+<script>
+function setAge(v){
+    document.getElementById("ageText").innerText="Selected Age: "+v;
+}
+
+</script>
+
+</body>
+</html>
