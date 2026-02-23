@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TypeScript to JavaScript Class Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .output-box {
+            background: #2d2d2d;
+            color: #61dafb;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Employee Management System</h2>
+    <p>Output from the Manager class implementation:</p>
+    <div id="display" class="output-box"></div>
+
+    <script>
+        // Transpiled TypeScript to JavaScript
+        class Manager {
+            constructor(id, name, dept, teamSize) {
+                this.id = id;
+                this.name = name;
+                this.department = dept;
+                this.teamSize = teamSize;
+            }
+
+            getDetails() {
+                return `ID: ${this.id} | Manager: ${this.name} | Dept: ${this.department} | Managing: ${this.teamSize} members`;
+            }
+        }
+
+        // Object instantiation
+        const myManager = new Manager(101, "Alice Smith", "Engineering", 12);
+        // Displaying output on the web page
+        document.getElementById('display').innerText = myManager.getDetails()
+        // Also logging to console
+        console.log(myManager.getDetails());
+    </script>
+
+</body>
+
+</html>

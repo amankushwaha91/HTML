@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Registration Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+    font-family:Arial, sans-serif;
+    background:#f0f0f0;
+}
+.form-container{
+    width:320px;
+    margin:50px auto;
+    background:#fff;
+    padding:20px;
+    box-sizing:border-box;
+}
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    box-sizing:border-box;
+}
+button{
+    width:100%;
+    padding:10px;
+    background:#007bff;
+    color:white;
+    border:none;
+}
+.error{
+    color:red;
+    font-size:14px;
+}
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Register</h2>
+    <form onsubmit="return validateForm()">
+        <input type="text" id="name" placeholder="Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirm" placeholder="Confirm Password">
+        <div id="msg" class="error"></div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+function validateForm(){
+    var name=document.getElementById("name").value.trim();
+    var email=document.getElementById("email").value.trim();
+    var password=document.getElementById("password").value;
+    var confirm=document.getElementById("confirm").value;
+    var msg=document.getElementById("msg");
+
+    if(name==="" || email==="" || password==="" || confirm===""){
+        msg.innerText="All fields are required";
+        return false;
+    }
+    if(password.length < 6){
+        msg.innerText="Password must be at least 6 characters";
+        return false;
+    }
+    if(password !== confirm){
+        msg.innerText="Passwords do not match";
+        return false;
+    }
+    msg.innerText="Registration successful";
+    msg.style.color="green";
+    return false;
+}
+</script>
+
+</body>
+</html>
